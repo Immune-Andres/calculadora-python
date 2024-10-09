@@ -1,0 +1,32 @@
+name: SonarQube Analysis for Python
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarQubeAnalysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run SonarQube scanner
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=vulnerable-python-calculator \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
