@@ -12,7 +12,7 @@ Este proyecto implementa una calculadora en Python que incluye vulnerabilidades 
 ## Instalación
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/calculadora-python.git
+   git clone https://github.com/Immune-Andres/calculadora-python.git
 2. Instalar dependencias:
    ```bash
    pip install -r requirements.txt
