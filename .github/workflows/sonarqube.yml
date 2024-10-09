@@ -27,6 +27,6 @@ jobs:
       - name: Run SonarQube scanner
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=vulnerable-python-calculator \
+            -Dsonar.projectKey=calculadora-python \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
