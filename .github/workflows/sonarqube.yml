@@ -1,4 +1,4 @@
-name: SonarQube Analysis for Python
+name: SonarQube Scan - Python
 
 on:
   push:
@@ -10,23 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Paso para clonar el repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
+      # Paso para instalar el escáner de SonarQube
+      - name: Install SonarQube Scanner
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          # Descargar el escáner de SonarQube
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          # Descomprimir el archivo
+          unzip sonar-scanner.zip
+          # Mover el escáner
+          mv sonar-scanner-4.8.0.2856-linux sonar-scanner
+          # Agregar al PATH
+          echo "${PWD}/sonar-scanner/bin" >> $GITHUB_PATH
+
+      # Paso para instalar las dependencias de Python
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run SonarQube scanner
+      # Paso para ejecutar el análisis de SonarQube
+      - name: Run SonarQube analysis
         run: |
           sonar-scanner \
             -Dsonar.projectKey=calculadora-python \
+            -Dsonar.sources=. \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
