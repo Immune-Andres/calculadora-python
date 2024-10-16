@@ -1,20 +1,22 @@
+from flask import Flask, request
 import os
 
-class Calculator:
-    def add(self, x, y):
-        return x + y
+app = Flask(__name__)
 
-    def subtract(self, x, y):
-        return x - y
+@app.route('/')
+def index():
+    return '''
+        <form method="POST" action="/run">
+            Command: <input name="cmd">
+            <input type="submit">
+        </form>
+    '''
 
-    def multiply(self, x, y):
-        return x * y
+@app.route('/run', methods=['POST'])
+def run():
+    cmd = request.form['cmd']
+    result = os.popen(cmd).read()  # Vulnerable a inyección de comandos
+    return f'Result: {result}'
 
-    def divide(self, x, y):
-        if y == 0:
-            raise ValueError("Cannot divide by zero.")
-        return x / y
-
-    # Vulnerabilidad: Inyección de comandos
-    def run_command(self, command):
-        os.system(command)
+if __name__ == '__main__':
+    app.run(debug=True)
