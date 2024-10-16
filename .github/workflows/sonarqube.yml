@@ -14,18 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Paso para instalar el escáner de SonarQube
-      - name: Install SonarQube Scanner
-        run: |
-          # Descargar el escáner de SonarQube
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          # Descomprimir el archivo
-          unzip sonar-scanner.zip
-          # Mover el escáner
-          mv sonar-scanner-4.8.0.2856-linux sonar-scanner
-          # Agregar al PATH
-          echo "${PWD}/sonar-scanner/bin" >> $GITHUB_PATH
-
       # Paso para instalar las dependencias de Python
       - name: Install Python dependencies
         run: |
@@ -34,9 +22,12 @@ jobs:
 
       # Paso para ejecutar el análisis de SonarQube
       - name: Run SonarQube analysis
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=calculadora-python \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        uses: sonarsource/sonarqube-scan-action@v3.0.0 
+        with: 
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=calculadora-python
+        env:
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
