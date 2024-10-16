@@ -19,3 +19,4 @@ Este proyecto implementa una calculadora en Python que incluye vulnerabilidades 
 3. Ejecutar el proyecto:
    ```bash
    python calculator.py
+Autores Andres Arrieta y Carlos Galo
