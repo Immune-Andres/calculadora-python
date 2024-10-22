@@ -5,7 +5,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 # Vulnerabilidad: Exposición de información sensible (Hardcoded Secrets)
-API_KEY = "12345-SECRET-API-KEY"
+API_KEY = {{secret.token}}
 
 # Inicializa una base de datos en memoria con algunos datos ficticios
 def init_db():
